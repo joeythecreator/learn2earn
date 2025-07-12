@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "718298726796",
+    "project_id": "learn-2-earn-66fd2",
+    "storage_bucket": "learn-2-earn-66fd2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718298726796:android:5ab70760128ade021a16a9",
+        "android_client_info": {
+          "package_name": "com.example.learn2earn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGan-LFQlHaZ1ihI8x7dNFEfVxDdDQTbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
