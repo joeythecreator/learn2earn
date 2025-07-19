@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/FLTFirebaseCorePlugin.h</key>
 		<data>
-		YEYDh2MZ+QMoD8+BtR/CA82ggyA=
+		dj4y5wcHGYlrJFv9kWE+6uwebzo=
 		</data>
 		<key>Headers/FLTFirebasePlugin.h</key>
 		<data>
@@ -16,21 +16,17 @@
 		<data>
 		aUYszQe+qvqVcUXrNyhIvA4v00g=
 		</data>
-		<key>Headers/dummy.h</key>
-		<data>
-		MjCr7s/pVjidi/yPujaWQOsPWeA=
-		</data>
 		<key>Headers/firebase_core-umbrella.h</key>
 		<data>
-		h7Q2685gK3TsrxAbSO/qKxdciM4=
+		RaDP9izqWMCwqFvUTyFZ1ePt9+Q=
 		</data>
 		<key>Headers/messages.g.h</key>
 		<data>
-		mT5GskNPdxW8c3cEYtLFEkTdBhM=
+		otmI4me4ph/plOx5JWmOEyZhheY=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		+aW8yKh28WJKB4wwtp2etBal3cw=
+		Z9bCjcBjN9AgctgmXLqtl7/X9k4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -43,11 +39,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			YEYDh2MZ+QMoD8+BtR/CA82ggyA=
+			dj4y5wcHGYlrJFv9kWE+6uwebzo=
 			</data>
 			<key>hash2</key>
 			<data>
-			qrj/7FJc6Hxcud1WoU8rWTafvADOanHSCP2REc+FpAk=
+			JRisA1gzwrhNRSJBerUf3rILnf6M1/3egFYFfp6PuGs=
 			</data>
 		</dict>
 		<key>Headers/FLTFirebasePlugin.h</key>
@@ -72,37 +68,26 @@
 			8Kk7LfApy8MQldjt4bveNWz7H19jZoBSyC5GoURqj8o=
 			</data>
 		</dict>
-		<key>Headers/dummy.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			MjCr7s/pVjidi/yPujaWQOsPWeA=
-			</data>
-			<key>hash2</key>
-			<data>
-			95LxlLYuHF1YMOIAbpCWCfFu/io3Vz/hcg9N2B7NAts=
-			</data>
-		</dict>
 		<key>Headers/firebase_core-umbrella.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			h7Q2685gK3TsrxAbSO/qKxdciM4=
+			RaDP9izqWMCwqFvUTyFZ1ePt9+Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			36QjlgxsyiH1VRQGintrKz5E8KimedJUgRtr0HdVfDE=
+			Opuvvzrr+S9g9om4ztiy7oBtgGwHtjp4m3pNCi64sww=
 			</data>
 		</dict>
 		<key>Headers/messages.g.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			mT5GskNPdxW8c3cEYtLFEkTdBhM=
+			otmI4me4ph/plOx5JWmOEyZhheY=
 			</data>
 			<key>hash2</key>
 			<data>
-			PlbdOUJkubPy6SznCzh8Pv7H4FzHkeFvl8WcR+rmVwc=
+			9is4ODTEu+B2F7FUyXe94vrp9qx/WWF6P+bmJjXTKLs=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

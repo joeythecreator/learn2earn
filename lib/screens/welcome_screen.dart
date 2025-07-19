@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -13,12 +14,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     super.initState();
 
-    // Auto-navigate to login after delay
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+    // Check if user is already signed in
+    Future.delayed(const Duration(seconds: 3), () {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // User is signed in - replace with actual home screen later
+        // For now just show a success message or stay on this screen
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User already signed in')),
+        );
+      } else {
+        // No user signed in, go to login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
     });
   }
 
