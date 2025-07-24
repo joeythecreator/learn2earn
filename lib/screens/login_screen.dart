@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_screen.dart';
+import 'main_menu.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,11 +28,20 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
-      // On success: navigate to home screen (replace with your actual screen)
+      if (!mounted) return;
+
+      // ✅ Optional: show SnackBar briefly before redirect
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful')),
+        const SnackBar(
+          content: Text('Login successful'),
+          backgroundColor: Colors.green,
+        ),
       );
-      // TODO: Navigate to your home screen here
+
+      // ✅ Navigate to MainMenuScreen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+      );
     } on FirebaseAuthException catch (e) {
       setState(() {
         _error = e.message ?? 'Login failed';
