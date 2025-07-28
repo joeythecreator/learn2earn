@@ -123,7 +123,14 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('Game Over!'),
-        content: Text('Your score is $_score out of ${_questions.length * 2}.'),
+        content: Text(
+          'Your score is $_score out of ${_questions.length * 2}.',
+          style: const TextStyle(
+            color: Colors.black, // Make sure score text is visible
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -152,7 +159,7 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
   @override
   Widget build(BuildContext context) {
     if (_currentIndex >= _questions.length) {
-      return const SizedBox(); 
+      return const SizedBox();
     }
     final question = _questions[_currentIndex]['question'] as String;
 
