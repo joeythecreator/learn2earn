@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'fill_in_the_blank_game.dart';
 
 class GamesScreen extends StatelessWidget {
   const GamesScreen({super.key});
@@ -26,7 +27,13 @@ class GamesScreen extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Navigate to the Fill in the Blank game screen
+          if (label == 'Fill in the Blank') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const FillInTheBlankGame()),
+            );
+          }
+          // Add more games here later when needed
         },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';
-import 'games_screen.dart'; // 👈 Added import
+import 'games_screen.dart'; 
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -14,7 +14,6 @@ class MainMenuScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             children: [
-              // Top Row: Profile Picture, Points, Language
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -90,10 +89,10 @@ class MainMenuScreen extends StatelessWidget {
               );
               break;
             case 'Rewards':
-              // TODO: Link RewardsScreen
+              // TODO: Add navigation to RewardsScreen
               break;
             case 'Leaderboard':
-              // TODO: Link LeaderboardScreen
+              // TODO: Add navigation to LeaderboardScreen
               break;
           }
         },
