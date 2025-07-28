@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      // ✅ Optional: show SnackBar briefly before redirect
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login successful'),
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      // ✅ Navigate to MainMenuScreen
+      
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainMenuScreen()),
       );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'settings_screen.dart';
+import 'games_screen.dart'; // 👈 Added import
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -74,7 +76,26 @@ class MainMenuScreen extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Implement navigation for each button
+          switch (label) {
+            case 'Settings':
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+              break;
+            case 'Games':
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const GamesScreen()),
+              );
+              break;
+            case 'Rewards':
+              // TODO: Link RewardsScreen
+              break;
+            case 'Leaderboard':
+              // TODO: Link LeaderboardScreen
+              break;
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
