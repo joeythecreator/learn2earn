@@ -1,6 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FillInTheBlankGame extends StatefulWidget {
   const FillInTheBlankGame({super.key});
@@ -117,45 +117,57 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
     }
   }
 
-  void _showScoreDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text('Game Over!'),
-        content: Text(
-          'Your score is $_score out of ${_questions.length * 2}.',
-          style: const TextStyle(
-            color: Colors.black, // Make sure score text is visible
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _score = 0;
-                _currentIndex = 0;
-                _questions.shuffle(Random());
-                _prepareOptions();
-              });
-            },
-            child: const Text('Play Again'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop(); // Go back to previous screen
-            },
-            child: const Text('Exit'),
-          ),
-        ],
-      ),
-    );
-  }
+  Future<void> _showScoreDialog() async {
+  final prefs = await SharedPreferences.getInstance();
 
+  // Get existing total points, default to 0
+  int currentTotal = prefs.getInt('totalPoints') ?? 0;
+
+  // Add current score to total points
+  int updatedTotal = currentTotal + _score;
+
+  // Save both totalPoints and lastScore
+  await prefs.setInt('totalPoints', updatedTotal);
+  await prefs.setInt('lastScore', _score);
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: const Text('Game Over!'),
+      content: Text(
+        'Your score is $_score out of ${_questions.length * 2}.\n'
+        'Total points: $updatedTotal',
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {
+              _score = 0;
+              _currentIndex = 0;
+              _questions.shuffle(Random());
+              _prepareOptions();
+            });
+          },
+          child: const Text('Play Again'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+          child: const Text('Exit'),
+        ),
+      ],
+    ),
+  );
+}
   @override
   Widget build(BuildContext context) {
     if (_currentIndex >= _questions.length) {

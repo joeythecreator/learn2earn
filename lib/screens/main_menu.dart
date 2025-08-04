@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'settings_screen.dart';
-import 'games_screen.dart'; 
+import 'games_screen.dart';
 
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
+
+  @override
+  State<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends State<MainMenuScreen> {
+  int _points = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPoints();
+  }
+
+  Future<void> _loadPoints() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedPoints = prefs.getInt('totalPoints') ?? 0;
+    debugPrint('Loaded totalPoints: $savedPoints'); // Debug print
+    setState(() {
+      _points = savedPoints;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +37,7 @@ class MainMenuScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             children: [
+              // Top Row with Profile, Points, and Language
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -28,12 +52,13 @@ class MainMenuScreen extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
-                      'Points: 000',
-                      style: TextStyle(
+                    child: Text(
+                      'Points: $_points',
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Colors.deepPurple, // Explicit color for contrast
                       ),
                     ),
                   ),
@@ -49,6 +74,7 @@ class MainMenuScreen extends StatelessWidget {
                         fontFamily: 'Poppins',
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: Colors.deepPurple, // Match color for consistency
                       ),
                     ),
                   ),
@@ -71,49 +97,51 @@ class MainMenuScreen extends StatelessWidget {
   }
 
   Widget _buildMenuButton(BuildContext context, String label) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          switch (label) {
-            case 'Settings':
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SettingsScreen()),
-              );
-              break;
-            case 'Games':
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const GamesScreen()),
-              );
-              break;
-            case 'Rewards':
-              // TODO: Add navigation to RewardsScreen
-              break;
-            case 'Leaderboard':
-              // TODO: Add navigation to LeaderboardScreen
-              break;
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 4,
+  return SizedBox(
+    width: double.infinity,
+    child: ElevatedButton(
+      onPressed: () {
+        switch (label) {
+          case 'Settings':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            );
+            break;
+          case 'Games':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const GamesScreen()),
+            ).then((_) {
+              _loadPoints(); // Reload points after game ends
+            });
+            break;
+          case 'Rewards':
+            // TODO: Add navigation to RewardsScreen
+            break;
+          case 'Leaderboard':
+            // TODO: Add navigation to LeaderboardScreen
+            break;
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.deepPurple,
-          ),
+        elevation: 4,
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.deepPurple,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
