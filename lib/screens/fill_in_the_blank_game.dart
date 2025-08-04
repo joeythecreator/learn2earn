@@ -118,56 +118,61 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
   }
 
   Future<void> _showScoreDialog() async {
-  final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
 
-  // Get existing total points, default to 0
-  int currentTotal = prefs.getInt('totalPoints') ?? 0;
+    // Get existing total points and redeemable points, default to 0
+    int currentTotal = prefs.getInt('totalPoints') ?? 0;
+    int currentRedeemable = prefs.getInt('redeemablePoints') ?? 0;
 
-  // Add current score to total points
-  int updatedTotal = currentTotal + _score;
+    // Add current score to both totals
+    int updatedTotal = currentTotal + _score;
+    int updatedRedeemable = currentRedeemable + _score;
 
-  // Save both totalPoints and lastScore
-  await prefs.setInt('totalPoints', updatedTotal);
-  await prefs.setInt('lastScore', _score);
+    // Save updated points
+    await prefs.setInt('totalPoints', updatedTotal);
+    await prefs.setInt('redeemablePoints', updatedRedeemable);
+    await prefs.setInt('lastScore', _score);
 
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      title: const Text('Game Over!'),
-      content: Text(
-        'Your score is $_score out of ${_questions.length * 2}.\n'
-        'Total points: $updatedTotal',
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Game Over!'),
+        content: Text(
+          'Your score is $_score out of ${_questions.length * 2}.\n'
+          'Total points: $updatedTotal\n'
+          'Redeemable points: $updatedRedeemable',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _score = 0;
+                _currentIndex = 0;
+                _questions.shuffle(Random());
+                _prepareOptions();
+              });
+            },
+            child: const Text('Play Again'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Exit'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            setState(() {
-              _score = 0;
-              _currentIndex = 0;
-              _questions.shuffle(Random());
-              _prepareOptions();
-            });
-          },
-          child: const Text('Play Again'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          },
-          child: const Text('Exit'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_currentIndex >= _questions.length) {

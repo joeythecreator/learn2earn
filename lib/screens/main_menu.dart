@@ -12,7 +12,7 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   int _points = 0;
   String _language = '❓';
   File? _profileImage;
@@ -20,6 +20,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   @override
   void initState() {
     super.initState();
+    _loadAllData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadAllData();
+  }
+
+  void _loadAllData() {
     _loadPoints();
     _loadLanguage();
     _loadProfileImage();
@@ -73,7 +83,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       Navigator.pushNamed(context, '/editProfilePicture')
                           .then((result) {
                         if (result != null && result == true) {
-                          // Only reload if profile picture was updated
                           _loadProfileImage();
                         }
                       });
@@ -82,8 +91,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       key: ValueKey(_profileImage?.path ?? 'default'),
                       radius: 24,
                       backgroundColor: Colors.white,
-                      backgroundImage:
-                          _profileImage != null ? FileImage(_profileImage!) : null,
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : null,
                       child: _profileImage == null
                           ? const Icon(Icons.person, color: Colors.deepPurple)
                           : null,
@@ -165,7 +175,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 context,
                 MaterialPageRoute(builder: (_) => const GamesScreen()),
               ).then((_) {
-                _loadPoints(); // Reload points after game ends
+                _loadPoints();
               });
               break;
             case 'Rewards':
