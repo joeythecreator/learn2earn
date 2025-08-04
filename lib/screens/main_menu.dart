@@ -4,7 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'settings_screen.dart';
 import 'games_screen.dart';
 import 'edit_language_screen.dart';
-import 'leaderboard_screen.dart'; // Added import for leaderboard screen
+import 'leaderboard_screen.dart';
+import 'rewards_screen.dart'; // <-- added import
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -101,7 +102,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
@@ -120,13 +122,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const EditLanguageScreen()),
+                        MaterialPageRoute(
+                            builder: (_) => const EditLanguageScreen()),
                       ).then((_) {
                         _loadLanguage();
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -163,7 +167,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           switch (label) {
             case 'Settings':
               Navigator.push(
@@ -180,7 +184,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
               });
               break;
             case 'Rewards':
-              // TODO: Add navigation to RewardsScreen
+              // Navigate to RewardsScreen, then reload points after return
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const RewardsScreen()),
+              );
+              _loadPoints();
               break;
             case 'Leaderboard':
               Navigator.push(
