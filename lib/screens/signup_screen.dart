@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -13,6 +15,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _error = '';
   bool _loading = false;
+  final Uuid _uuid = const Uuid();
 
   Future<void> _signUp() async {
     setState(() {
@@ -25,6 +28,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      // Generate and save local userID after successful signup
+      final prefs = await SharedPreferences.getInstance();
+      String? userID = prefs.getString('userID');
+      if (userID == null) {
+        userID = _uuid.v4();
+        await prefs.setString('userID', userID);
+        debugPrint('Generated new userID on signup: $userID');
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Account created!')),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';  // Add uuid dependency if not already added
 import 'signup_screen.dart';
 import 'main_menu.dart';
 
@@ -15,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _error = '';
   bool _loading = false;
+  final Uuid _uuid = const Uuid();
 
   Future<void> _login() async {
     setState(() {
@@ -28,9 +31,18 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text.trim(),
       );
 
+      final prefs = await SharedPreferences.getInstance();
+
+      // Save a local userID if none exists yet
+      String? userID = prefs.getString('userID');
+      if (userID == null) {
+        userID = _uuid.v4();
+        await prefs.setString('userID', userID);
+        debugPrint('Generated new userID on login: $userID');
+      }
+
       if (!mounted) return;
 
-      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login successful'),
@@ -38,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainMenuScreen()),
       );

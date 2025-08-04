@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:learn2earn/services/local_storage_service.dart';
 import 'package:learn2earn/models/leaderboard_entry.dart';
+import 'package:uuid/uuid.dart';  
 
 class FillInTheBlankGame extends StatefulWidget {
   const FillInTheBlankGame({super.key});
@@ -73,6 +74,8 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
   late List<String> _shuffledOptions;
   String? _feedback;
 
+  final Uuid _uuid = const Uuid();
+
   @override
   void initState() {
     super.initState();
@@ -93,11 +96,7 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
 
     setState(() {
       if (choice == correct) {
-        if (!_secondTry) {
-          _score += 2;
-        } else {
-          _score += 1;
-        }
+        _score += _secondTry ? 1 : 2;
         _nextQuestion();
       } else {
         if (!_secondTry) {
@@ -123,6 +122,14 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
   Future<void> _showScoreDialog() async {
     final prefs = await SharedPreferences.getInstance();
 
+    // Generate and save userID locally if it doesn't exist
+    String? userID = prefs.getString('userID');
+    if (userID == null) {
+      userID = _uuid.v4();
+      await prefs.setString('userID', userID);
+      debugPrint('Generated new userID: $userID');
+    }
+
     int currentTotal = prefs.getInt('totalPoints') ?? 0;
     int currentRedeemable = prefs.getInt('redeemablePoints') ?? 0;
 
@@ -133,15 +140,16 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
     await prefs.setInt('redeemablePoints', updatedRedeemable);
     await prefs.setInt('lastScore', _score);
 
-    // Get username and profile image path from SharedPreferences (or adjust as needed)
     final username = prefs.getString('username') ?? 'Unknown';
     final profileImagePath = prefs.getString('profileImagePath');
 
-    // Create leaderboard entry and update leaderboard
+    final existingEntry = await LocalStorageService.getEntryByUserId(userID);
+
     final newEntry = LeaderboardEntry(
+      userId: userID,
       username: username,
       score: updatedTotal,
-      profileImagePath: profileImagePath,
+      profileImagePath: profileImagePath ?? existingEntry?.profileImagePath,
     );
 
     await LocalStorageService.addOrUpdateEntry(newEntry);
@@ -191,6 +199,7 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
     if (_currentIndex >= _questions.length) {
       return const SizedBox();
     }
+
     final question = _questions[_currentIndex]['question'] as String;
 
     return Scaffold(

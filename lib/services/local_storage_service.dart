@@ -23,18 +23,30 @@ class LocalStorageService {
 
   static Future<void> addOrUpdateEntry(LeaderboardEntry newEntry) async {
     List<LeaderboardEntry> entries = await loadLeaderboard();
-    final index = entries.indexWhere((e) => e.username == newEntry.username);
+    final index = entries.indexWhere((e) => e.userId == newEntry.userId);
 
     if (index >= 0) {
-      // Update existing
       entries[index] = newEntry;
     } else {
-      // Add new
       entries.add(newEntry);
     }
 
-    // Sort by score descending
     entries.sort((a, b) => b.score.compareTo(a.score));
+    await saveLeaderboard(entries);
+  }
+
+  static Future<LeaderboardEntry?> getEntryByUserId(String userId) async {
+    final entries = await loadLeaderboard();
+    try {
+      return entries.firstWhere((e) => e.userId == userId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> deleteEntryByUserId(String userId) async {
+    List<LeaderboardEntry> entries = await loadLeaderboard();
+    entries.removeWhere((e) => e.userId == userId);
     await saveLeaderboard(entries);
   }
 }
