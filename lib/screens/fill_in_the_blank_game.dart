@@ -1,6 +1,9 @@
 import 'dart:math';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:learn2earn/services/local_storage_service.dart';
+import 'package:learn2earn/models/leaderboard_entry.dart';
 
 class FillInTheBlankGame extends StatefulWidget {
   const FillInTheBlankGame({super.key});
@@ -120,18 +123,28 @@ class _FillInTheBlankGameState extends State<FillInTheBlankGame> {
   Future<void> _showScoreDialog() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Get existing total points and redeemable points, default to 0
     int currentTotal = prefs.getInt('totalPoints') ?? 0;
     int currentRedeemable = prefs.getInt('redeemablePoints') ?? 0;
 
-    // Add current score to both totals
     int updatedTotal = currentTotal + _score;
     int updatedRedeemable = currentRedeemable + _score;
 
-    // Save updated points
     await prefs.setInt('totalPoints', updatedTotal);
     await prefs.setInt('redeemablePoints', updatedRedeemable);
     await prefs.setInt('lastScore', _score);
+
+    // Get username and profile image path from SharedPreferences (or adjust as needed)
+    final username = prefs.getString('username') ?? 'Unknown';
+    final profileImagePath = prefs.getString('profileImagePath');
+
+    // Create leaderboard entry and update leaderboard
+    final newEntry = LeaderboardEntry(
+      username: username,
+      score: updatedTotal,
+      profileImagePath: profileImagePath,
+    );
+
+    await LocalStorageService.addOrUpdateEntry(newEntry);
 
     showDialog(
       context: context,

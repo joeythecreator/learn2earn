@@ -14,7 +14,7 @@ class EditProfilePictureScreen extends StatefulWidget {
 
 class _EditProfilePictureScreenState extends State<EditProfilePictureScreen> {
   File? _profileImage;
-  File? _tempImage; // holds newly picked image before confirmation
+  File? _tempImage;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _EditProfilePictureScreenState extends State<EditProfilePictureScreen> {
 
   Future<void> _confirmImage() async {
     if (_tempImage == null) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      ScaffoldMessenger.of(this.context).showSnackBar(
         const SnackBar(content: Text('No image selected to confirm.')),
       );
       return;
@@ -68,11 +68,11 @@ class _EditProfilePictureScreenState extends State<EditProfilePictureScreen> {
       _tempImage = savedImage;
     });
 
-    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+    ScaffoldMessenger.of(this.context).showSnackBar(
       const SnackBar(content: Text('Profile picture saved!')),
     );
 
-    Navigator.pop(context as BuildContext); // Go back to previous screen (MainMenuScreen)
+    Navigator.pop(this.context);
   }
 
   @override

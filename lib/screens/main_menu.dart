@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'settings_screen.dart';
 import 'games_screen.dart';
 import 'edit_language_screen.dart';
+import 'leaderboard_screen.dart'; // Added import for leaderboard screen
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -182,7 +183,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
               // TODO: Add navigation to RewardsScreen
               break;
             case 'Leaderboard':
-              // TODO: Add navigation to LeaderboardScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LeaderboardScreen()),
+              );
               break;
           }
         },
