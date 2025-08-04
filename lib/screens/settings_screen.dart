@@ -4,6 +4,7 @@ import 'edit_username_screen.dart';
 import 'edit_email_screen.dart';
 import 'edit_password_screen.dart';
 import 'edit_language_screen.dart';
+import 'edit_profile_picture_screen.dart'; // Correct import
 import 'login_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -36,6 +37,8 @@ class SettingsScreen extends StatelessWidget {
             _buildSettingsButton(context, 'Password', const EditPasswordScreen()),
             const SizedBox(height: 12),
             _buildSettingsButton(context, 'Language', const EditLanguageScreen()),
+            const SizedBox(height: 12),
+            _buildSettingsButton(context, 'Edit Profile Picture', const EditProfilePictureScreen()),
             const Spacer(),
             SizedBox(
               width: double.infinity,

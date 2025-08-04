@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'settings_screen.dart';
 import 'games_screen.dart';
-import 'edit_language_screen.dart'; // Import for navigating to language selector
+import 'edit_language_screen.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
@@ -14,18 +15,19 @@ class MainMenuScreen extends StatefulWidget {
 class _MainMenuScreenState extends State<MainMenuScreen> {
   int _points = 0;
   String _language = '❓';
+  File? _profileImage;
 
   @override
   void initState() {
     super.initState();
     _loadPoints();
     _loadLanguage();
+    _loadProfileImage();
   }
 
   Future<void> _loadPoints() async {
     final prefs = await SharedPreferences.getInstance();
     final savedPoints = prefs.getInt('totalPoints') ?? 0;
-    debugPrint('Loaded totalPoints: $savedPoints');
     setState(() {
       _points = savedPoints;
     });
@@ -37,6 +39,20 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     setState(() {
       _language = savedLang;
     });
+  }
+
+  Future<void> _loadProfileImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final path = prefs.getString('profileImagePath');
+    if (path != null && File(path).existsSync()) {
+      setState(() {
+        _profileImage = File(path);
+      });
+    } else {
+      setState(() {
+        _profileImage = null;
+      });
+    }
   }
 
   @override
@@ -52,10 +68,26 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: Colors.deepPurple),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/editProfilePicture')
+                          .then((result) {
+                        if (result != null && result == true) {
+                          // Only reload if profile picture was updated
+                          _loadProfileImage();
+                        }
+                      });
+                    },
+                    child: CircleAvatar(
+                      key: ValueKey(_profileImage?.path ?? 'default'),
+                      radius: 24,
+                      backgroundColor: Colors.white,
+                      backgroundImage:
+                          _profileImage != null ? FileImage(_profileImage!) : null,
+                      child: _profileImage == null
+                          ? const Icon(Icons.person, color: Colors.deepPurple)
+                          : null,
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -79,7 +111,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         context,
                         MaterialPageRoute(builder: (_) => const EditLanguageScreen()),
                       ).then((_) {
-                        _loadLanguage(); // reload after returning
+                        _loadLanguage();
                       });
                     },
                     child: Container(
@@ -102,7 +134,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 ],
               ),
               const SizedBox(height: 40),
-              // Four Buttons
               _buildMenuButton(context, 'Games'),
               const SizedBox(height: 20),
               _buildMenuButton(context, 'Rewards'),
